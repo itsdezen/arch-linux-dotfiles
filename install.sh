@@ -87,9 +87,10 @@ STOW_PACKAGES=(zsh git starship mise ghostty hyprland waybar fuzzel mako hyprloc
 # from $DOTFILES_DIR/theme/theme by scripts, not symlinked into $HOME.
 
 # packages whose target dir mixes static config with app-generated state
-# (claude projects/sessions, herdr logs/sockets, opencode cache) — always
-# stowed file-by-file so runtime-generated files never land in the repo.
-NO_FOLD_PACKAGES=(claude herdr opencode codex)
+# (claude projects/sessions, herdr logs/sockets, opencode cache, fcitx5's
+# conf/ which fcitx5 itself writes cached_layouts/notifications.conf into)
+# — always stowed file-by-file so runtime-generated files never land in the repo.
+NO_FOLD_PACKAGES=(claude herdr opencode codex fcitx5)
 
 # ── small utils ──────────────────────────────────────────────────────────────
 
