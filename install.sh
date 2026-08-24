@@ -345,6 +345,8 @@ deploy_system_files() {
   section "System files"
   sudo install -D -m 644 "$DOTFILES_DIR/system/etc/greetd/config.toml" /etc/greetd/config.toml
   ok "/etc/greetd/config.toml"
+  sudo install -D -m 644 "$DOTFILES_DIR/system/etc/keyd/default.conf" /etc/keyd/default.conf
+  ok "/etc/keyd/default.conf"
   section_end
 }
 
@@ -373,6 +375,12 @@ enable_services() {
     ok "bluetooth enabled"
   else
     warn "failed to enable bluetooth"
+  fi
+
+  if sudo systemctl enable --now keyd.service >/dev/null 2>&1; then
+    ok "keyd enabled and started (SUPER-as-Cmd remap is live)"
+  else
+    warn "failed to enable/start keyd"
   fi
 
   if command -v docker &>/dev/null; then
@@ -456,12 +464,12 @@ validate_installation() {
   # on real hardware (Known Gap).
   for bin in Hyprland waybar fuzzel mako hyprlock hypridle hyprpaper spf \
              nvim zsh starship stow tuigreet ghostty git mise gh lazygit \
-             docker jq yq direnv shellcheck fd rg btop chromium; do
+             docker jq yq direnv shellcheck fd rg btop chromium keyd; do
     check_bin "$bin"
   done
 
   local svc
-  for svc in NetworkManager bluetooth greetd docker; do
+  for svc in NetworkManager bluetooth greetd docker keyd; do
     check_service "$svc"
   done
 

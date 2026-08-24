@@ -47,6 +47,10 @@ cliphist
 # Brightness control (requires user in "video" group — see enable_services in install.sh)
 brightnessctl
 
+# Key remapping daemon — SUPER-as-Cmd for terminal copy/paste/clear, see
+# system/etc/keyd/default.conf
+keyd
+
 # Fonts
 inter-font
 ttf-fantasque-sans-mono

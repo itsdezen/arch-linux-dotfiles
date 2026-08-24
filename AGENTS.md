@@ -42,8 +42,10 @@ arch-linux-dotfiles/
 ├── opencode/             → ~/.config/opencode/
 ├── codex/                → ~/.codex/config.toml
 ├── herdr/                → ~/.config/herdr/config.toml
-├── scripts/              → ~/.local/bin/{screenshot,clipboard-picker,wallpaper-set,fcitx5-status}
-└── system/etc/greetd/    → /etc/greetd/config.toml (deployed by install.sh, never stowed)
+├── scripts/              → ~/.local/bin/{screenshot,clipboard-picker,wallpaper-set,fcitx5-status,control-center,volume-popup}
+└── system/etc/            → deployed by install.sh, never stowed:
+    ├── greetd/config.toml
+    └── keyd/default.conf  (SUPER-as-Cmd: super+c/v/k → ctrl+shift+c/v/k)
 ```
 
 ---
@@ -85,6 +87,7 @@ Spot-check these on the real box; none of them block a first run:
 - **Hyprland config ported to Lua, syntax partially runtime-verified**: since Hyprland 0.55, hyprlang (`.conf`) is deprecated in favor of Lua (`hyprland.lua`); this repo migrated `hyprland/.config/hypr/*.conf` to `*.lua` fully, following the official `hyprwm/Hyprland` example config and Lua API docs. First real-boot run surfaced two config keys removed in 0.55+: `dwindle.pseudotile` (now per-window only, via `windowrule = pseudo, ...` / `hl.dsp.window.pseudo()` — the global switch was dropped, so `decoration.lua`'s `dwindle` table no longer sets it) and `gestures.workspace_swipe` (replaced by the standalone `hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })` call at the bottom of `hyprland.lua`, matching the official example). Still unconfirmed: whether `pin = true` is a valid static `window_rule` field (used for Picture-in-Picture in `windowrules.lua` — docs only confirm it as a keybind dispatcher, `hl.dsp.window.pin()`, not a window-rule field) and whether `"specialWorkspace"` is still a valid `hl.animation` leaf name (docs list a non-exhaustive sample that doesn't explicitly include it). If Hyprland refuses to start, check `journalctl` / run `Hyprland` from a TTY to see the actual Lua error, and compare against `https://github.com/hyprwm/Hyprland/blob/main/example/hyprland.lua`.
 - **Chromium has no theme integration**: it's in `packages/official.txt` as a plain browser install — no GTK/Wayland-flag tuning or TokyoNight theming was set up for it (out of scope for this ask).
 - **fcitx5 input method not runtime-verified**: `fcitx5/.config/fcitx5/profile` pins two IMs (`keyboard-us`, `unikey`) toggled with fcitx5's own default trigger key (Ctrl+Space — not overridden here, since the compiled-in default already matches what's wanted); `conf/unikey.conf` pins `InputMethod=Telex` (already fcitx5-unikey's compiled-in default). Env vars in `env.lua` cover the classic GTK/Qt/XIM immodule bridge for XWayland and GTK3/Qt5 apps; native Wayland GTK4/Qt6 clients should pick fcitx5 up automatically via text-input-v3. Chromium's Wayland IME support is flaky across versions and may need an extra `--enable-wayland-ime` flag if Vietnamese input doesn't trigger there. Waybar shows the active IM (EN/VI) via `custom/fcitx5` in `waybar/.config/waybar/config.jsonc`, backed by `scripts/.local/bin/fcitx5-status` (polls `fcitx5-remote -n` every second; click toggles via `fcitx5-remote -t`) — none of this is verified on real hardware yet.
+- **keyd SUPER-as-Cmd remap, real-hardware behavior unconfirmed**: `system/etc/keyd/default.conf` overrides only `c`/`v`/`k` inside keyd's implicit `[meta]` layer, remapping `super+c/v/k` → `ctrl+shift+c/v/k` (the exact combos Ghostty's `config` already binds to copy/paste/clear) at the evdev level, below Hyprland's compositor-level SUPER grab — every other `super+<key>` still passes through untouched to `hyprland/.config/hypr/binds.lua`. `install.sh`'s `enable_services` runs `systemctl enable --now keyd.service`, so it's live immediately after a fresh `install.sh install` run — no reboot needed. Not yet verified against a physical keyboard for layout edge cases (e.g. non-US layouts) or interaction with fcitx5's own Ctrl-based bindings.
 
 ---
 

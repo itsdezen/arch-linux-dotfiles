@@ -12,13 +12,17 @@
   "modules-right": ["hyprland/workspaces", "custom/fcitx5", "network", "pulseaudio", "battery", "custom/control-center", "clock#date", "clock#time"],
 
   "custom/launcher": {
-    "format": "󰀵",
+    "format": "󰣇",
     "on-click": "fuzzel",
     "tooltip": false
   },
 
   "hyprland/window": {
-    "format": "{title}",
+    "format": "{class}",
+    "rewrite": {
+      "^com\\.mitchellh\\.ghostty$": "Ghostty",
+      "^[Cc]hromium.*$": "Chromium"
+    },
     "max-length": 50,
     "separate-outputs": true,
     "tooltip": false
