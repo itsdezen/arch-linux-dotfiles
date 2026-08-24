@@ -15,7 +15,8 @@ hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("clipboard-picker"))
 
 -- Window management
 hl.bind(mainMod .. " + W",             hl.dsp.window.close())
-hl.bind(mainMod .. " + Q",             hl.dsp.exit())
+hl.bind(mainMod .. " + Q",             hl.dsp.window.close())
+hl.bind(mainMod .. " + SHIFT + Q",     hl.dsp.exit())
 hl.bind(mainMod .. " + F",             hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
 hl.bind(mainMod .. " + SHIFT + SPACE", hl.dsp.window.float({ action = "toggle" }))
 
