@@ -25,9 +25,17 @@ Bootstraps a fresh Arch Linux install into a Hyprland/Wayland tiling desktop —
 
 ## Quick start
 
+**Fresh machine, no git yet** (installs git, clones to `~/Developer/dotfiles`, runs install):
+
 ```sh
-git clone <this-repo> ~/Developer/arch-linux-dotfiles
-cd ~/Developer/arch-linux-dotfiles
+bash <(curl -fsSL https://raw.githubusercontent.com/itsdezen/arch-linux-dotfiles/main/install.sh) bootstrap
+```
+
+**Already cloned:**
+
+```sh
+git clone https://github.com/itsdezen/arch-linux-dotfiles ~/Developer/dotfiles
+cd ~/Developer/dotfiles
 ./install.sh
 ```
 
@@ -36,6 +44,7 @@ Requires a fresh Arch Linux install (`/etc/arch-release` present) and a non-root
 Other entry points:
 
 ```sh
+./install.sh bootstrap  # fresh machine: install git, clone to ~/Developer/dotfiles, then install
 ./install.sh stow       # re-stow configs, sync mise runtimes + nvim plugins (e.g. after editing a package)
 ./install.sh validate   # check binaries/services, print a PASS/WARN summary
 ./install.sh uninstall  # remove all stow symlinks (asks for confirmation)

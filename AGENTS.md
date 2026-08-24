@@ -8,7 +8,7 @@ This repo bootstraps a fresh Arch Linux install into a Hyprland/Wayland tiling d
 
 ## Design Philosophy
 
-1. **One script**: `install.sh` is the single entry point — `install`, `stow`, `validate`, `uninstall`. No per-tool install scripts.
+1. **One script**: `install.sh` is the single entry point — `bootstrap`, `install`, `stow`, `validate`, `uninstall`. No per-tool install scripts.
 2. **Modular**: each Stow package is self-contained. Files symlink into `$HOME` via `stow -t "$HOME"`.
 3. **Back up before replace, never silently delete**: a conflicting file at a stow target gets moved into a timestamped `~/.dotfiles-backup-<timestamp>/` before the real stow runs. Why: a bare-metal first boot has no prior git history (or Time Machine) to fall back on the way an established personal machine does — silently deleting a conflict here has no undo. This is a deliberate divergence from the sibling macOS dotfiles repo, which deletes conflicts with no backup.
 4. **Minimal**: no abstractions beyond what the tools need.

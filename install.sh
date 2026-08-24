@@ -79,6 +79,7 @@ spin_skip() {
 # ── paths / package sets ─────────────────────────────────────────────────────
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_REPO="https://github.com/itsdezen/arch-linux-dotfiles"
 BACKUP_DIR="$HOME/.dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
 
 STOW_PACKAGES=(zsh git starship mise ghostty hyprland waybar fuzzel mako hyprlock hypridle hyprpaper superfile nvim btop claude opencode codex herdr scripts)
@@ -510,6 +511,43 @@ cmd_install() {
   warn "Reboot (or re-login) to pick up group membership, default shell, and greetd."
 }
 
+cmd_bootstrap() {
+  # Remote entry point for a fresh box with no git yet — invoke as:
+  #   bash <(curl -fsSL https://raw.githubusercontent.com/itsdezen/arch-linux-dotfiles/main/install.sh) bootstrap
+  # curl itself must already be present (it's not universally guaranteed on
+  # a bare `base` install either — install with `pacman -S curl` first if
+  # the one-liner above fails to even start).
+  section "git"
+  if command -v git &>/dev/null; then
+    skip "git"
+  else
+    spin "Installing git"
+    if sudo pacman -Syu --needed --noconfirm git >/dev/null 2>&1; then
+      spin_ok "git installed"
+    else
+      abort "failed to install git — check your network/mirrors and try again"
+    fi
+  fi
+  section_end
+
+  section "Dotfiles"
+  local dest="$HOME/Developer/dotfiles"
+  if [[ -d "$dest/.git" ]]; then
+    skip "already cloned — $dest"
+  else
+    mkdir -p "$(dirname "$dest")"
+    spin "Cloning dotfiles"
+    if git clone --quiet "$DOTFILES_REPO" "$dest" >/dev/null 2>&1; then
+      spin_ok "Dotfiles cloned"
+    else
+      abort "git clone failed — check your network/mirrors and try again"
+    fi
+  fi
+  section_end
+
+  exec "$dest/install.sh" install
+}
+
 cmd_stow() {
   backup_and_stow
   install_runtimes
@@ -541,9 +579,10 @@ cmd_uninstall() {
 require_not_root
 
 case "${1:-install}" in
+  bootstrap) cmd_bootstrap ;;
   install)   cmd_install ;;
   stow)      cmd_stow ;;
   validate)  cmd_validate ;;
   uninstall) cmd_uninstall ;;
-  *) printf "usage: %s [install|stow|validate|uninstall]\n" "$0"; exit 1 ;;
+  *) printf "usage: %s [bootstrap|install|stow|validate|uninstall]\n" "$0"; exit 1 ;;
 esac
