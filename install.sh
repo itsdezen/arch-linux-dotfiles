@@ -235,6 +235,45 @@ install_devtools_vendor() {
   section_end
 }
 
+# ── runtimes / plugins ───────────────────────────────────────────────────────
+
+install_runtimes() {
+  section "Runtimes"
+  if ! command -v mise &>/dev/null; then
+    warn "mise not found — skipping runtime install"
+    section_end
+    return
+  fi
+  spin "Installing runtimes"
+  local out
+  if out=$(mise install --yes 2>&1); then
+    if echo "$out" | grep -q "all tools are installed"; then
+      spin_skip "Runtimes up to date"
+    else
+      spin_ok "Runtimes installed"
+    fi
+  else
+    spin_warn "mise install failed — check manually"
+  fi
+  section_end
+}
+
+sync_nvim_plugins() {
+  section "Neovim plugins"
+  if ! command -v nvim &>/dev/null; then
+    warn "nvim not found — skipping plugin sync"
+    section_end
+    return
+  fi
+  spin "Syncing plugins"
+  if nvim --headless "+Lazy! sync" +qa &>/dev/null; then
+    spin_ok "Plugins synced"
+  else
+    spin_warn "Neovim plugin sync failed — check manually"
+  fi
+  section_end
+}
+
 # ── stow ─────────────────────────────────────────────────────────────────────
 
 stow_pkg() {
@@ -459,6 +498,8 @@ cmd_install() {
 
   install_devtools_vendor
   backup_and_stow
+  install_runtimes
+  sync_nvim_plugins
   deploy_system_files
   configure_greetd
   enable_services
@@ -471,6 +512,8 @@ cmd_install() {
 
 cmd_stow() {
   backup_and_stow
+  install_runtimes
+  sync_nvim_plugins
 }
 
 cmd_validate() {

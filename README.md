@@ -36,7 +36,7 @@ Requires a fresh Arch Linux install (`/etc/arch-release` present) and a non-root
 Other entry points:
 
 ```sh
-./install.sh stow       # re-stow configs only (e.g. after editing a package)
+./install.sh stow       # re-stow configs, sync mise runtimes + nvim plugins (e.g. after editing a package)
 ./install.sh validate   # check binaries/services, print a PASS/WARN summary
 ./install.sh uninstall  # remove all stow symlinks (asks for confirmation)
 ```
