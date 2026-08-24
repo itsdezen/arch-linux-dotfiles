@@ -9,7 +9,7 @@
 
   "modules-left": ["custom/launcher", "hyprland/window", "custom/files", "custom/browser", "custom/terminal", "custom/clipboard"],
   "modules-center": [],
-  "modules-right": ["hyprland/workspaces", "custom/fcitx5", "network", "pulseaudio", "battery", "clock"],
+  "modules-right": ["hyprland/workspaces", "custom/fcitx5", "network", "pulseaudio", "battery", "clock#date", "clock#time"],
 
   "custom/launcher": {
     "format": " ",
@@ -66,24 +66,23 @@
   },
 
   "network": {
-    "format-wifi": "  {essid}",
-    "format-ethernet": "󰈀 {ifname}",
-    "format-disconnected": "󰤮 disconnected",
-    "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
+    "format-wifi": "",
+    "format-ethernet": "󰈀",
+    "format-disconnected": "󰤮",
+    "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+    "on-click": "nm-connection-editor"
   },
 
   // battery module stays unconditional — Waybar auto-hides it when no
   // battery is present, so this config works on both desktop and laptop.
   "battery": {
-    "format": "{icon}",
+    "format": "{icon} {capacity}%",
     "format-icons": ["", "", "", "", ""],
-    "format-charging": "  {capacity}%",
-    "format-critical": " {capacity}%",
+    "format-charging": " {capacity}%",
     "states": {
       "warning": 20,
       "critical": 10
-    },
-    "tooltip": false
+    }
   },
 
   "pulseaudio": {
@@ -96,8 +95,13 @@
     "scroll-step": 5
   },
 
-  "clock": {
-    "format": "{:%H:%M   %a %d %b}",
-    "tooltip-format": "{:%Y-%m-%d %H:%M}"
+  "clock#date": {
+    "format": "{:%a %d %b}",
+    "tooltip-format": "{:%Y-%m-%d}"
+  },
+
+  "clock#time": {
+    "format": "{:%H:%M}",
+    "tooltip-format": "{:%H:%M:%S}"
   }
 }

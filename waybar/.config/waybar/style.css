@@ -4,7 +4,7 @@
    transparent bar, following FireDrop6000/hyprland-mydots' flat dock style. */
 
 * {
-  font-family: "Inter", "FantasqueSansM Nerd Font", sans-serif;
+  font-family: "FantasqueSansM Nerd Font Mono", "Inter", sans-serif;
   font-size: 13px;
   font-weight: 500;
   min-height: 0;
@@ -51,39 +51,36 @@ window#waybar {
   padding: 0 8px;
 }
 
+/* Status cluster (workspaces → clock, right of the dock buttons) — plain
+   white text/icons, no accent colors; state is conveyed by icon shape
+   (battery/network glyphs) or opacity (workspaces), not hue. */
+#workspaces,
+#workspaces button,
+#custom-fcitx5,
+#network,
+#pulseaudio,
+#battery,
+#clock {
+  color: #ffffff;
+}
+
 #workspaces button {
-  color: #565f89;
   padding: 0 6px;
   background: transparent;
+  opacity: 0.45;
 }
 
-#workspaces button.active {
-  color: #7aa2f7;
-}
-
+#workspaces button.active,
 #workspaces button.urgent {
-  color: #f7768e;
+  opacity: 1;
+  font-weight: 700;
 }
 
 #custom-fcitx5 {
-  color: #7dcfff;
   font-weight: 700;
 }
 
-#clock {
-  color: #7aa2f7;
+#clock.time {
   font-weight: 700;
   padding-right: 4px;
-}
-
-#battery.warning {
-  color: #e0af68;
-}
-
-#battery.critical {
-  color: #f7768e;
-}
-
-#pulseaudio.muted {
-  color: #565f89;
 }

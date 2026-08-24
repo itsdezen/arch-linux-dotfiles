@@ -25,6 +25,7 @@ hyprpolkitagent
 
 # Networking / bluetooth
 networkmanager
+network-manager-applet
 bluez
 bluez-utils
 
