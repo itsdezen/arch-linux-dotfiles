@@ -39,8 +39,9 @@ hl.config({
         },
     },
 
+    -- pseudotile was removed as a dwindle master switch in Hyprland 0.55+;
+    -- it's now per-window only (windowrule = pseudo, ... / hl.dsp.window.pseudo()).
     dwindle = {
-        pseudotile     = true,
         preserve_split = true,
     },
 

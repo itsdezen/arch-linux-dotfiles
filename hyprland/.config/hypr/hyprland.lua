@@ -20,13 +20,16 @@ hl.config({
         },
     },
 
-    gestures = {
-        workspace_swipe = true,
-    },
-
     misc = {
         disable_hyprland_logo    = true,
         disable_splash_rendering = true,
         force_default_wallpaper  = 0,
     },
+})
+
+-- gestures.workspace_swipe was removed in Hyprland 0.55+ in favor of hl.gesture().
+hl.gesture({
+    fingers   = 3,
+    direction = "horizontal",
+    action    = "workspace",
 })
