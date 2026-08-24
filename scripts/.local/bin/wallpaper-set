@@ -7,9 +7,21 @@ path="$(realpath "$path")"
 
 conf="$HOME/.config/hypr/wallpaper.conf"
 mkdir -p "$(dirname "$conf")"
+
+old_path=""
+[[ -f "$conf" ]] && old_path="$(sed -n 's/^preload = //p' "$conf")"
+
 cat > "$conf" <<EOF
 preload = $path
 wallpaper = ,$path
 EOF
 
-hyprctl hyprpaper reload ",$path" >/dev/null 2>&1 || true
+# Live-reload the running hyprpaper instance: "reload" isn't a real hyprpaper
+# IPC command (silently failed before, masked by `|| true`) — the actual
+# sequence is preload the new image, point the monitor at it, then unload
+# the old one so hyprpaper doesn't keep every past wallpaper in memory.
+hyprctl hyprpaper preload "$path" >/dev/null 2>&1 || true
+hyprctl hyprpaper wallpaper ",$path" >/dev/null 2>&1 || true
+if [[ -n "$old_path" && "$old_path" != "$path" ]]; then
+  hyprctl hyprpaper unload "$old_path" >/dev/null 2>&1 || true
+fi

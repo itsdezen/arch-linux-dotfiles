@@ -23,3 +23,9 @@ border-color=#7aa2f7
 [urgency=high]
 border-color=#f7768e
 default-timeout=0
+
+# Toggled by scripts/.local/bin/control-center ("Do Not Disturb Toggle"),
+# via `makoctl mode -t do-not-disturb` — suppresses popups while active,
+# notifications still land in `makoctl history`.
+[mode=do-not-disturb]
+invisible=1

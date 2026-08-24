@@ -1,0 +1,4 @@
+# Runtime-only wallpaper path written by scripts/.local/bin/wallpaper-set.
+# Lives inside hyprland/.config/hypr/ because that whole tree is stowed as
+# one symlink target — see the comment in hyprpaper/.config/hyprpaper/hyprpaper.conf.
+hyprland/.config/hypr/wallpaper.conf

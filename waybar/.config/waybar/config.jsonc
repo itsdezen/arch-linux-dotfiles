@@ -1,18 +1,18 @@
 {
   "layer": "top",
   "position": "top",
-  "height": 30,
-  "spacing": 10,
-  "margin-top": 6,
-  "margin-left": 10,
-  "margin-right": 10,
+  "height": 34,
+  "spacing": 4,
+  "margin-top": 8,
+  "margin-left": 24,
+  "margin-right": 24,
 
   "modules-left": ["custom/launcher", "hyprland/window", "custom/files", "custom/browser", "custom/terminal", "custom/clipboard"],
   "modules-center": [],
-  "modules-right": ["hyprland/workspaces", "custom/fcitx5", "network", "pulseaudio", "battery", "clock#date", "clock#time"],
+  "modules-right": ["hyprland/workspaces", "custom/fcitx5", "network", "pulseaudio", "battery", "custom/control-center", "clock#date", "clock#time"],
 
   "custom/launcher": {
-    "format": " ",
+    "format": "󰀵",
     "on-click": "fuzzel",
     "tooltip": false
   },
@@ -52,8 +52,8 @@
     "format": "{icon}",
     "on-click": "activate",
     "format-icons": {
-      "active": "",
-      "default": ""
+      "active": "󰝥",
+      "default": "󰝦"
     }
   },
 
@@ -66,7 +66,7 @@
   },
 
   "network": {
-    "format-wifi": "",
+    "format-wifi": "󰖩",
     "format-ethernet": "󰈀",
     "format-disconnected": "󰤮",
     "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
@@ -77,8 +77,8 @@
   // battery is present, so this config works on both desktop and laptop.
   "battery": {
     "format": "{icon} {capacity}%",
-    "format-icons": ["", "", "", "", ""],
-    "format-charging": " {capacity}%",
+    "format-icons": ["󰂎", "󰁼", "󰁾", "󰂀", "󰁹"],
+    "format-charging": "󰂄 {capacity}%",
     "states": {
       "warning": 20,
       "critical": 10
@@ -86,13 +86,20 @@
   },
 
   "pulseaudio": {
-    "format": "{icon} {volume}%",
-    "format-muted": "󰝟 muted",
+    "format": "{icon}",
+    "format-muted": "{icon}",
     "format-icons": {
-      "default": ["", "", ""]
+      "muted": "󰝟",
+      "default": ["󰕽", "󰕿", "󰕾"]
     },
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-click": "volume-popup",
     "scroll-step": 5
+  },
+
+  "custom/control-center": {
+    "format": "󰙯",
+    "on-click": "control-center",
+    "tooltip": false
   },
 
   "clock#date": {

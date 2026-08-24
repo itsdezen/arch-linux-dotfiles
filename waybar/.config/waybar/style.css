@@ -1,18 +1,23 @@
 /* TokyoNight Night — hand-authored, kept in sync with theme/colors by hand
    (Waybar's CSS can't source a shell file).
    No boxed/pill module backgrounds — everything floats directly on a fully
-   transparent bar, following FireDrop6000/hyprland-mydots' flat dock style. */
+   transparent bar, following FireDrop6000/hyprland-mydots' flat dock style.
+   Spacing scale: 2/4/8/16/24px. GTK's CSS engine (what Waybar renders with)
+   has no `rem` support, so the scale is expressed directly in px. */
 
 * {
   font-family: "FantasqueSansM Nerd Font Mono", "Inter", sans-serif;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 24px;
+  font-weight: 400;
   min-height: 0;
+  /* Bar has no background — soft shadow keeps text/icons legible over
+     whatever wallpaper sits behind it. */
+  text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 window#waybar {
   background: transparent;
-  color: #c0caf5;
+  color: #ffffff;
 }
 
 #custom-launcher,
@@ -26,28 +31,29 @@ window#waybar {
 #network,
 #pulseaudio,
 #battery,
+#custom-control-center,
 #clock {
   background: transparent;
-  color: #c0caf5;
-  padding: 0 6px;
+  color: #ffffff;
+  padding: 0 8px;
 }
 
 #custom-launcher {
-  color: #7aa2f7;
-  font-size: 16px;
+  color: #ffffff;
+  font-size: 32px;
   padding-left: 4px;
 }
 
 #window {
   font-weight: 700;
-  padding: 0 10px;
+  padding: 0 8px;
 }
 
 #custom-files,
 #custom-browser,
 #custom-terminal,
 #custom-clipboard {
-  font-weight: 500;
+  font-weight: 400;
   padding: 0 8px;
 }
 
@@ -60,12 +66,13 @@ window#waybar {
 #network,
 #pulseaudio,
 #battery,
+#custom-control-center,
 #clock {
   color: #ffffff;
 }
 
 #workspaces button {
-  padding: 0 6px;
+  padding: 0 8px;
   background: transparent;
   opacity: 0.45;
 }
@@ -84,3 +91,4 @@ window#waybar {
   font-weight: 700;
   padding-right: 4px;
 }
+

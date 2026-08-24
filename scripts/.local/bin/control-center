@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+choice="$(printf '%s\n' \
+  "Wifi Settings" \
+  "Bluetooth Toggle" \
+  "Do Not Disturb Toggle" \
+  "Lock Screen" \
+  | fuzzel --dmenu --prompt "Control Center> ")"
+
+case "$choice" in
+  "Wifi Settings")
+    nm-connection-editor
+    ;;
+  "Bluetooth Toggle")
+    if bluetoothctl show | grep -q "Powered: yes"; then
+      bluetoothctl power off
+    else
+      bluetoothctl power on
+    fi
+    ;;
+  "Do Not Disturb Toggle")
+    makoctl mode -t do-not-disturb
+    ;;
+  "Lock Screen")
+    hyprlock
+    ;;
+esac
