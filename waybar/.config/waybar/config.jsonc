@@ -2,14 +2,51 @@
   "layer": "top",
   "position": "top",
   "height": 30,
-  "spacing": 4,
+  "spacing": 10,
   "margin-top": 6,
   "margin-left": 10,
   "margin-right": 10,
 
-  "modules-left": ["hyprland/workspaces"],
-  "modules-center": ["hyprland/window"],
-  "modules-right": ["custom/fcitx5", "network", "pulseaudio", "battery", "clock"],
+  "modules-left": ["custom/launcher", "hyprland/window", "custom/files", "custom/browser", "custom/terminal", "custom/clipboard"],
+  "modules-center": [],
+  "modules-right": ["hyprland/workspaces", "custom/fcitx5", "network", "pulseaudio", "battery", "tray", "clock"],
+
+  "custom/launcher": {
+    "format": " ",
+    "on-click": "fuzzel",
+    "tooltip": false
+  },
+
+  "hyprland/window": {
+    "format": "{title}",
+    "max-length": 50,
+    "separate-outputs": true,
+    "tooltip": false
+  },
+
+  "custom/files": {
+    "format": "Files",
+    "on-click": "spf",
+    "tooltip": false
+  },
+
+  "custom/browser": {
+    "format": "Browser",
+    "on-click": "chromium",
+    "tooltip": false
+  },
+
+  "custom/terminal": {
+    "format": "Terminal",
+    "on-click": "ghostty",
+    "tooltip": false
+  },
+
+  "custom/clipboard": {
+    "format": "Clipboard",
+    "on-click": "clipboard-picker",
+    "tooltip": false
+  },
 
   "hyprland/workspaces": {
     "format": "{icon}",
@@ -18,12 +55,6 @@
       "active": "",
       "default": ""
     }
-  },
-
-  "hyprland/window": {
-    "format": "{title}",
-    "max-length": 50,
-    "separate-outputs": true
   },
 
   "custom/fcitx5": {
@@ -44,13 +75,15 @@
   // battery module stays unconditional — Waybar auto-hides it when no
   // battery is present, so this config works on both desktop and laptop.
   "battery": {
-    "format": "{icon} {capacity}%",
+    "format": "{icon}",
     "format-icons": ["", "", "", "", ""],
-    "format-charging": " {capacity}%",
+    "format-charging": "  {capacity}%",
+    "format-critical": " {capacity}%",
     "states": {
       "warning": 20,
       "critical": 10
-    }
+    },
+    "tooltip": false
   },
 
   "pulseaudio": {
@@ -61,6 +94,11 @@
     },
     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
     "scroll-step": 5
+  },
+
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8
   },
 
   "clock": {

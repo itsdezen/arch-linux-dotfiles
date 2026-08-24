@@ -1,38 +1,61 @@
 /* TokyoNight Night — hand-authored, kept in sync with theme/colors by hand
-   (Waybar's CSS can't source a shell file). */
+   (Waybar's CSS can't source a shell file).
+   No boxed/pill module backgrounds — everything floats directly on a fully
+   transparent bar, following FireDrop6000/hyprland-mydots' flat dock style. */
 
 * {
   font-family: "Inter", "FantasqueSansM Nerd Font", sans-serif;
   font-size: 13px;
+  font-weight: 500;
   min-height: 0;
 }
 
 window#waybar {
   background: transparent;
+  color: #c0caf5;
 }
 
-#workspaces,
+#custom-launcher,
 #window,
+#custom-files,
+#custom-browser,
+#custom-terminal,
+#custom-clipboard,
+#workspaces,
 #custom-fcitx5,
 #network,
 #pulseaudio,
 #battery,
+#tray,
 #clock {
-  background-color: #1f2335;
+  background: transparent;
   color: #c0caf5;
-  border-radius: 10px;
-  padding: 0 10px;
-  margin: 0 3px;
+  padding: 0 6px;
 }
 
-#custom-fcitx5 {
-  color: #7dcfff;
-  font-weight: bold;
+#custom-launcher {
+  color: #7aa2f7;
+  font-size: 16px;
+  padding-left: 4px;
+}
+
+#window {
+  font-weight: 700;
+  padding: 0 10px;
+}
+
+#custom-files,
+#custom-browser,
+#custom-terminal,
+#custom-clipboard {
+  font-weight: 500;
+  padding: 0 8px;
 }
 
 #workspaces button {
   color: #565f89;
   padding: 0 6px;
+  background: transparent;
 }
 
 #workspaces button.active {
@@ -43,9 +66,15 @@ window#waybar {
   color: #f7768e;
 }
 
+#custom-fcitx5 {
+  color: #7dcfff;
+  font-weight: 700;
+}
+
 #clock {
   color: #7aa2f7;
-  font-weight: bold;
+  font-weight: 700;
+  padding-right: 4px;
 }
 
 #battery.warning {
