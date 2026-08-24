@@ -9,7 +9,7 @@
 
   "modules-left": ["hyprland/workspaces"],
   "modules-center": ["hyprland/window"],
-  "modules-right": ["network", "pulseaudio", "battery", "clock"],
+  "modules-right": ["custom/fcitx5", "network", "pulseaudio", "battery", "clock"],
 
   "hyprland/workspaces": {
     "format": "{icon}",
@@ -24,6 +24,14 @@
     "format": "{title}",
     "max-length": 50,
     "separate-outputs": true
+  },
+
+  "custom/fcitx5": {
+    "exec": "fcitx5-status",
+    "interval": 1,
+    "return-type": "json",
+    "format": "{text}",
+    "on-click": "fcitx5-remote -t"
   },
 
   "network": {

@@ -35,6 +35,11 @@ hl.bind("Print",                   hl.dsp.exec_cmd("screenshot full"))
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("screenshot region --copy"))
 hl.bind(mainMod .. " + ESCAPE",    hl.dsp.exec_cmd("hyprlock"))
 
+-- Brightness (media keys; brightnessctl needs the "video" group — see
+-- enable_services in install.sh)
+hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"), { locked = true, repeating = true })
+
 -- Mouse (move/resize floating windows)
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })

@@ -10,6 +10,15 @@ hl.env("MOZ_ENABLE_WAYLAND", "1")
 hl.env("SDL_VIDEODRIVER", "wayland")
 hl.env("CLUTTER_BACKEND", "wayland")
 
+-- fcitx5 input method (Unikey/Telex for Vietnamese, keyboard-us for English —
+-- see fcitx5/.config/fcitx5/). Native Wayland GTK4/Qt6 clients pick fcitx5 up
+-- over the text-input-v3 protocol without these, but XWayland and older
+-- GTK3/Qt5 apps still need the classic immodule bridge env vars.
+hl.env("GTK_IM_MODULE", "fcitx")
+hl.env("QT_IM_MODULE", "fcitx")
+hl.env("XMODIFIERS", "@im=fcitx")
+hl.env("SDL_IM_MODULE", "fcitx")
+
 -- bibata-cursor-theme-bin (AUR). Exact installed directory name under
 -- /usr/share/icons is only verifiable on real hardware — spot-check with
 -- `find /usr/share/icons -maxdepth 1 -iname 'Bibata*'` on first boot and

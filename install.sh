@@ -82,7 +82,7 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_REPO="https://github.com/itsdezen/arch-linux-dotfiles"
 BACKUP_DIR="$HOME/.dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
 
-STOW_PACKAGES=(zsh git starship mise ghostty hyprland waybar fuzzel mako hyprlock hypridle hyprpaper superfile nvim btop claude opencode codex herdr scripts)
+STOW_PACKAGES=(zsh git starship mise ghostty hyprland waybar fuzzel mako hyprlock hypridle hyprpaper superfile nvim btop claude opencode codex herdr fcitx5 scripts)
 # theme/ is deliberately excluded from STOW_PACKAGES — it's sourced in place
 # from $DOTFILES_DIR/theme/theme by scripts, not symlinked into $HOME.
 
@@ -394,6 +394,14 @@ enable_services() {
     ok "pipewire user units enabled"
   else
     warn "failed to enable pipewire user units"
+  fi
+
+  if groups "$USER" | grep -qw video; then
+    skip "$USER already in video group"
+  elif sudo usermod -aG video "$USER"; then
+    ok "added $USER to video group (re-login required, needed for brightnessctl)"
+  else
+    warn "failed to add $USER to video group"
   fi
 
   section_end

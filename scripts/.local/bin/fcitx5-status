@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "$(fcitx5-remote -n)" in
+  unikey) text="VI" ;;
+  *)      text="EN" ;;
+esac
+
+printf '{"text":"%s","tooltip":"Input method: %s (Ctrl+Space to switch)"}\n' "$text" "$text"

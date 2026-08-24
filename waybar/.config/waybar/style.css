@@ -13,6 +13,7 @@ window#waybar {
 
 #workspaces,
 #window,
+#custom-fcitx5,
 #network,
 #pulseaudio,
 #battery,
@@ -22,6 +23,11 @@ window#waybar {
   border-radius: 10px;
   padding: 0 10px;
   margin: 0 3px;
+}
+
+#custom-fcitx5 {
+  color: #7dcfff;
+  font-weight: bold;
 }
 
 #workspaces button {

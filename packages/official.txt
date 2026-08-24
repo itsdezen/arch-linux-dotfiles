@@ -43,6 +43,9 @@ slurp
 wl-clipboard
 cliphist
 
+# Brightness control (requires user in "video" group — see enable_services in install.sh)
+brightnessctl
+
 # Fonts
 inter-font
 ttf-fantasque-sans-mono
@@ -56,6 +59,13 @@ superfile
 
 # Browser
 chromium
+
+# Input method — fcitx5 + Unikey (Telex) for Vietnamese, keyboard-us for English
+fcitx5
+fcitx5-gtk
+fcitx5-qt
+fcitx5-configtool
+fcitx5-unikey
 
 # Core CLI / editor / shell
 neovim
