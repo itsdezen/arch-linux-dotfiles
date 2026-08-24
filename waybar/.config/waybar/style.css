@@ -26,7 +26,6 @@ window#waybar {
 #network,
 #pulseaudio,
 #battery,
-#tray,
 #clock {
   background: transparent;
   color: #c0caf5;
