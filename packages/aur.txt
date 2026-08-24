@@ -1,0 +1,7 @@
+# AUR packages (paru) — no official package exists.
+
+# Prebuilt cursor theme — avoids python-clickgen build deps during bootstrap.
+bibata-cursor-theme-bin
+
+# OpenCode CLI has no official package.
+opencode-bin

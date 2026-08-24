@@ -1,0 +1,18 @@
+# Dev-tools layer (pacman, official extra) — daily-driver CLI stack.
+# Claude Code, Codex CLI, and herdr have no Arch package at all — those are
+# installed by install_devtools_vendor() via their official curl installers,
+# not listed here.
+
+mise
+github-cli
+lazygit
+docker
+docker-compose
+docker-buildx
+lazydocker
+jq
+go-yq
+direnv
+shellcheck
+fd
+ripgrep

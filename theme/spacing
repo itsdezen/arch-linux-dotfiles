@@ -1,0 +1,11 @@
+# TokyoNight Night — spacing / geometry tokens
+# Sourced in place (not stowed) as $DOTFILES_DIR/theme/spacing.
+# Values match the visual targets used across hyprland/, waybar/, fuzzel/,
+# mako/, hyprlock/ — restrained rounding, low blur, subtle shadow.
+
+ROUNDING=10
+BORDER_SIZE=1
+GAPS_IN=8
+GAPS_OUT=12
+BLUR_SIZE=3
+BLUR_PASSES=2

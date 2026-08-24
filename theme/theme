@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# TokyoNight Night — aggregate theme entrypoint.
+# Sourced in place (not stowed) as $DOTFILES_DIR/theme/theme.
+# Scripts under scripts/.local/bin/ source this file for the full token set.
+
+THEME_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# shellcheck source=./colors
+source "$THEME_DIR/colors"
+# shellcheck source=./typography
+source "$THEME_DIR/typography"
+# shellcheck source=./spacing
+source "$THEME_DIR/spacing"

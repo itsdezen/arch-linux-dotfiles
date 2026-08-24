@@ -1,0 +1,55 @@
+/* TokyoNight Night — hand-authored, kept in sync with theme/colors by hand
+   (Waybar's CSS can't source a shell file). */
+
+* {
+  font-family: "Inter", "FantasqueSansM Nerd Font", sans-serif;
+  font-size: 13px;
+  min-height: 0;
+}
+
+window#waybar {
+  background: transparent;
+}
+
+#workspaces,
+#window,
+#network,
+#pulseaudio,
+#battery,
+#clock {
+  background-color: #1f2335;
+  color: #c0caf5;
+  border-radius: 10px;
+  padding: 0 10px;
+  margin: 0 3px;
+}
+
+#workspaces button {
+  color: #565f89;
+  padding: 0 6px;
+}
+
+#workspaces button.active {
+  color: #7aa2f7;
+}
+
+#workspaces button.urgent {
+  color: #f7768e;
+}
+
+#clock {
+  color: #7aa2f7;
+  font-weight: bold;
+}
+
+#battery.warning {
+  color: #e0af68;
+}
+
+#battery.critical {
+  color: #f7768e;
+}
+
+#pulseaudio.muted {
+  color: #565f89;
+}

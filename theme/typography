@@ -1,0 +1,7 @@
+# TokyoNight Night — typography tokens
+# Sourced in place (not stowed) as $DOTFILES_DIR/theme/typography.
+
+FONT_UI="Inter"
+FONT_MONO="FantasqueSansM Nerd Font Mono"
+FONT_SIZE_UI=10
+FONT_SIZE_MONO=14

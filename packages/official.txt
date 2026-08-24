@@ -1,0 +1,66 @@
+# Official repo packages (pacman, core/extra) — desktop stack.
+# ghostty is deliberately NOT listed here: install_ghostty() in install.sh
+# tries pacman first, falls back to the AUR build via paru. See AGENTS.md
+# Known Gaps for why (newly-official package, mirror sync uncertain).
+
+# Wayland compositor + portal
+hyprland
+xdg-desktop-portal-hyprland
+
+# Display manager
+greetd
+greetd-tuigreet
+
+# Desktop shell
+waybar
+fuzzel
+mako
+hyprlock
+hypridle
+hyprpaper
+
+# Auth prompt UI — bare polkit has no GUI agent without this
+polkit
+hyprpolkitagent
+
+# Networking / bluetooth
+networkmanager
+bluez
+bluez-utils
+
+# Audio (pipewire + compat layers so libpulse-linked apps get sound)
+pipewire
+pipewire-pulse
+pipewire-alsa
+wireplumber
+
+# Notifications
+libnotify
+
+# Screenshot / clipboard tooling
+grim
+slurp
+wl-clipboard
+cliphist
+
+# Fonts
+inter-font
+ttf-fantasque-sans-mono
+ttf-fantasque-nerd
+
+# Icon theme (fuzzel)
+papirus-icon-theme
+
+# File manager (binary is `spf`, not `superfile`)
+superfile
+
+# Core CLI / editor / shell
+neovim
+git
+zsh
+stow
+starship
+btop
+
+# Build tooling — required to bootstrap paru (makepkg -si)
+base-devel

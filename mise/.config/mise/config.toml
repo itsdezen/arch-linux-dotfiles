@@ -1,0 +1,14 @@
+[tools]
+# JavaScript / Bun
+node = "lts"
+bun = "latest"
+pnpm = "latest"
+
+# Python
+python = "latest"
+uv = "latest"
+
+# Systems
+rust = "stable"
+rust-analyzer = "latest"
+go = "latest"

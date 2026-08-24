@@ -1,0 +1,151 @@
+# =============================================================================
+# ~/.zshrc — Main Zsh configuration
+# Managed by: ~/Developer/arch-linux-dotfiles
+# =============================================================================
+
+# ── Path ─────────────────────────────────────────────────────────────────────
+export PATH="$HOME/.local/bin:$PATH"
+
+# ── zinit (Plugin Manager) ──────────────────────────────────────────────────
+# Modern, fast, and flexible zsh plugin manager
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+
+# Load zinit
+if [[ ! -d "$ZINIT_HOME" ]]; then
+  mkdir -p "$(dirname $ZINIT_HOME)"
+  git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+
+source "${ZINIT_HOME}/zinit.zsh"
+
+# ── Plugins ──────────────────────────────────────────────────────────────────
+
+# Git aliases
+zinit ice wait lucid
+zinit snippet https://github.com/ohmyzsh/ohmyzsh/raw/master/plugins/git/git.plugin.zsh
+
+# Fish-like autosuggestions
+zinit ice wait lucid atload'_zsh_autosuggest_start'
+zinit light zsh-users/zsh-autosuggestions
+
+# Extra completions for common CLI tools
+zinit ice wait lucid blockf
+zinit light zsh-users/zsh-completions
+
+# Fast syntax highlighting (better performance)
+# Must be loaded last for proper functionality
+zinit ice wait lucid atinit'zicompinit; zicdreplay'
+zinit light zdharma-continuum/fast-syntax-highlighting
+
+# ── Colors ───────────────────────────────────────────────────────────────────
+# Auto-alias ls with colors (GNU coreutils, as shipped on Arch)
+if ls --color=auto /dev/null &>/dev/null; then
+  alias ls='ls --color=auto'
+fi
+
+# ── Completion styling ───────────────────────────────────────────────────────
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # case-insensitive
+zstyle ':completion:*' menu select                          # arrow-key select
+
+# Color for diff command
+if diff --color /dev/null{,} &>/dev/null 2>&1; then
+  alias diff='diff --color'
+fi
+
+# ── History ──────────────────────────────────────────────────────────────────
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+setopt HIST_IGNORE_ALL_DUPS  # Don't save duplicate commands
+setopt HIST_IGNORE_SPACE     # Don't save commands starting with space
+setopt SHARE_HISTORY         # Share history between tabs
+setopt EXTENDED_HISTORY      # Save timestamp for each command
+setopt HIST_EXPIRE_DUPS_FIRST # Expire duplicates first when trimming history
+setopt HIST_FIND_NO_DUPS     # Skip duplicates when searching history
+setopt HIST_VERIFY           # Expand !! etc. into the buffer before running
+
+# ── Aliases ──────────────────────────────────────────────────────────────────
+
+# ls shortcuts (color already enabled above)
+alias ll="ls -lh"
+alias la="ls -lah"
+
+# Navigation
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+
+# Git shortcuts
+# Note: Git plugin provides many aliases like:
+# - gst (git status), gd (git diff), ga (git add), gc (git commit)
+# - gp (git push), gl (git pull), gco (git checkout), gcb (git checkout -b)
+# - glog (git log --oneline --decorate --graph)
+alias g="git"
+
+# Development
+alias dev="cd ~/Developer"
+alias dots="cd ~/Developer/arch-linux-dotfiles"
+alias dots-sync="(cd ~/Developer/arch-linux-dotfiles && git pull && ./install.sh stow)"
+alias v="nvim"
+alias cc="claude"
+alias oc="opencode"
+alias h="herdr"
+
+# Misc
+alias zrc="$EDITOR ~/.zshrc"
+alias reload="source ~/.zshrc"
+
+# ── mise (Polyglot Version Manager) ─────────────────────────────────────────
+# Automatically loads versions from .node-version, .python-version, etc.
+if command -v mise &>/dev/null; then
+  eval "$(mise activate zsh)"
+fi
+
+# ── Editor ───────────────────────────────────────────────────────────────────
+export EDITOR="nvim"
+export VISUAL="$EDITOR"
+
+# ── Starship prompt ─────────────────────────────────────────────────────────
+# Fast, minimal, and highly customizable cross-shell prompt
+if command -v starship &>/dev/null; then
+  eval "$(starship init zsh)"
+fi
+
+# ── direnv ───────────────────────────────────────────────────────────────────
+# Per-project environment variable loader (.envrc)
+if command -v direnv &>/dev/null; then
+  eval "$(direnv hook zsh)"
+fi
+
+# ── Dotfiles auto-update ─────────────────────────────────────────────────────
+# Offers to pull + re-stow when the dotfiles repo is behind its remote.
+# Fetches at most once per $DOTFILES_UPDATE_INTERVAL (default 24h) so shell
+# startup stays fast. First install is unaffected — this file only exists
+# after the initial ./install.sh. Run `dotfiles-update` to check manually.
+dotfiles-update() {
+  local repo="$HOME/Developer/arch-linux-dotfiles"
+  [[ -d "$repo/.git" ]] || return 0
+
+  if [[ "$1" != "--force" ]]; then
+    local stamp="${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles-update-check"
+    local interval="${DOTFILES_UPDATE_INTERVAL:-86400}"
+    [[ -f "$stamp" ]] && (( $(date +%s) - $(date -r "$stamp" +%s) < interval )) && return 0
+    mkdir -p "${stamp:h}" && touch "$stamp"
+  fi
+
+  git -C "$repo" fetch --quiet 2>/dev/null || return 0
+  local behind
+  behind="$(git -C "$repo" rev-list --count 'HEAD..@{u}' 2>/dev/null)" || return 0
+  (( behind > 0 )) || return 0
+
+  local resp
+  printf "dotfiles: %d new commit(s) on remote. Pull and re-stow? [Y/n] " "$behind"
+  read -r resp
+  [[ -z "$resp" || "$resp" == [Yy] ]] || return 0
+  git -C "$repo" pull --ff-only && "$repo/install.sh" stow
+}
+dotfiles-update
+
+# ── Local overrides ──────────────────────────────────────────────────────────
+# This file is NOT committed to git — use for machine-specific config
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

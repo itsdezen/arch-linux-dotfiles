@@ -1,0 +1,25 @@
+sort=-time
+layer=overlay
+anchor=top-right
+width=320
+height=110
+margin=10
+padding=12
+border-size=1
+border-radius=10
+font=Inter 10
+default-timeout=5000
+
+background-color=#1f2335e6
+text-color=#c0caf5
+border-color=#3b4261
+
+[urgency=low]
+border-color=#565f89
+
+[urgency=normal]
+border-color=#7aa2f7
+
+[urgency=high]
+border-color=#f7768e
+default-timeout=0

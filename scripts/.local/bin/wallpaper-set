@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+path="${1:?usage: wallpaper-set <path>}"
+path="$(realpath "$path")"
+[[ -f "$path" ]] || { echo "wallpaper-set: no such file: $path" >&2; exit 1; }
+
+conf="$HOME/.config/hypr/wallpaper.conf"
+mkdir -p "$(dirname "$conf")"
+cat > "$conf" <<EOF
+preload = $path
+wallpaper = ,$path
+EOF
+
+hyprctl hyprpaper reload ",$path" >/dev/null 2>&1 || true

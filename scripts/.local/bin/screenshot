@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mode="${1:-full}"
+copy="${2:-}"
+
+dir="$HOME/Pictures/Screenshots"
+mkdir -p "$dir"
+file="$dir/screenshot-$(date +%Y%m%d-%H%M%S).png"
+
+case "$mode" in
+  full)
+    grim "$file"
+    ;;
+  region)
+    geometry="$(slurp)"
+    [[ -n "$geometry" ]] || exit 0
+    grim -g "$geometry" "$file"
+    ;;
+  *)
+    echo "usage: screenshot {full|region} [--copy]" >&2
+    exit 1
+    ;;
+esac
+
+if [[ "$copy" == "--copy" ]]; then
+  wl-copy < "$file"
+  notify-send "Screenshot copied" "$file"
+else
+  notify-send "Screenshot saved" "$file"
+fi

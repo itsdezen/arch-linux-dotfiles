@@ -1,0 +1,9 @@
+# Deployed by install.sh via `sudo install -D` — never symlinked/stowed.
+# tuigreet launches Hyprland directly on successful login.
+
+[terminal]
+vt = 1
+
+[default_session]
+command = "tuigreet --time --remember --cmd Hyprland"
+user = "greeter"

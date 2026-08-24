@@ -1,0 +1,33 @@
+font-family = FantasqueSansM Nerd Font Mono
+font-size = 14
+font-feature = liga
+font-feature = calt
+background-opacity = 0.75
+font-thicken = true
+font-thicken-strength = 120
+adjust-cell-height = 10%
+window-padding-x = 10
+window-padding-y = 10
+theme = TokyoNight Night
+font-synthetic-style = true
+window-vsync = true
+
+# alt+backspace defaults to ESC+DEL, which breaks in terminal vim (ESC exits
+# insert mode). "opt" (macOS option-key alias) renamed to the portable "alt".
+keybind = alt+backspace=text:\x17
+
+# Hyprland claims every SUPER-prefixed combo at the compositor level, so any
+# app-level Ghostty bind on super+... would silently never fire once the
+# Hyprland binds are active. Remapped to ctrl+shift+... instead (was
+# super+backspace / super+k / super+l on the macOS version of this config).
+#
+# ctrl+shift+backspace has no default binding; send ctrl+u (delete to start
+# of line), which works in both readline (shell) and vim insert mode.
+keybind = ctrl+shift+backspace=text:\x15
+
+# ctrl+shift+k / ctrl+shift+l: send ctrl+l so the focused shell clears
+# itself, working both inside and outside herdr/nvim.
+keybind = ctrl+shift+k=text:\x0c
+keybind = ctrl+shift+l=text:\x0c
+
+custom-shader = shaders/cursor.glsl

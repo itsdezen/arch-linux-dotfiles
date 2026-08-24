@@ -1,0 +1,6 @@
+# Codex CLI config — see https://github.com/openai/codex
+#
+# Project trust levels and hook state are populated automatically by the
+# Codex CLI at runtime (they were machine-specific session state on the
+# macOS source repo, not portable config) and are intentionally left out
+# here — Codex will (re-)prompt for trust on first run per project.

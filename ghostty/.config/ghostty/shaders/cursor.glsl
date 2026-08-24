@@ -1,0 +1,167 @@
+// TokyoNight cursor shader: three independent cursor behaviors, toggled below.
+// - smooth: cursor glides (VS Code-style) from its previous position/size to the current one
+// - blaze:  directional glow trail shaped by the cursor's movement, then fades
+// - smear:  bright streak swiping from the previous to the current cursor position, flash-fades out
+
+// ---- behavior flags ----
+const bool ENABLE_SMOOTH = true;
+const bool ENABLE_BLAZE = true;
+const bool ENABLE_SMEAR = true;
+
+// ---- shared tokyonight accent palette (used by blaze and smear) ----
+// tokyonight only defines one cyan (#7dcfff, ANSI 6/14) so inner and outer share it.
+const vec4 ACCENT_COLOR = vec4(0.490, 0.812, 1.000, 1.0); // tokyonight cyan #7dcfff (inner)
+const vec4 ACCENT_COLOR_BRIGHT = vec4(0.490, 0.812, 1.000, 1.0); // tokyonight cyan #7dcfff (outer)
+
+float sdRectangle(in vec2 p, in vec2 center, in vec2 halfSize) {
+    vec2 d = abs(p - center) - halfSize;
+    return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
+}
+
+vec2 norm(vec2 value, float isPosition) {
+    return (value * 2.0 - (iResolution.xy * isPosition)) / iResolution.y;
+}
+
+vec2 getRectangleCenter(vec4 rectangle) {
+    return vec2(rectangle.x + (rectangle.z / 2.), rectangle.y - (rectangle.w / 2.));
+}
+
+// distance from p to segment a-b; h is the projection factor (0 at a, 1 at b)
+float sdSegment(vec2 p, vec2 a, vec2 b, out float h) {
+    vec2 pa = p - a;
+    vec2 ba = b - a;
+    h = clamp(dot(pa, ba) / max(dot(ba, ba), 1e-6), 0.0, 1.0);
+    return length(pa - ba * h);
+}
+
+// ---- blaze: tokyonight-colored glow that flashes and fades around the cursor ----
+
+const float BLAZE_DURATION = 0.3; // seconds
+const float BLAZE_SIZE_SCALE = 0.55; // shrinks the glow halo reach (1.0 = full trail length)
+
+float easeBlaze(float x) {
+    return pow(1.0 - x, 3.0);
+}
+
+vec4 applyBlaze(vec4 baseColor, vec2 vu, vec4 currentCursor, vec2 centerCC, vec2 centerCP) {
+    float progress = clamp((iTime - iTimeCursorChange) / BLAZE_DURATION, 0.0, 1.0);
+    if (progress >= 1.0) {
+        return baseColor;
+    }
+
+    float sdfCurrentCursor = sdRectangle(vu, centerCC, currentCursor.zw * 0.5);
+    float easedProgress = easeBlaze(progress);
+    float lineLength = distance(centerCC, centerCP) * BLAZE_SIZE_SCALE;
+
+    vec4 trail = mix(ACCENT_COLOR, baseColor, 1. - smoothstep(0., sdfCurrentCursor + .002, 0.004));
+    trail = mix(ACCENT_COLOR_BRIGHT, trail, 1. - smoothstep(0., sdfCurrentCursor + .002, 0.004));
+    return mix(trail, baseColor, 1. - smoothstep(0., sdfCurrentCursor, easedProgress * lineLength));
+}
+
+// ---- smear: light-streak swipe from the previous to the current cursor position ----
+
+const float SMEAR_DURATION = 0.18; // seconds
+const float SMEAR_WIDTH_SCALE = 0.9; // streak thickness relative to cursor height
+const float SMEAR_TAPER = 0.6; // how much the tail end narrows (0 = uniform width, 1 = fully pointed)
+
+float easeSmear(float x) {
+    return pow(1.0 - x, 2.0);
+}
+
+vec4 applySmear(vec4 baseColor, vec2 vu, vec4 currentCursor, vec2 centerCC, vec2 centerCP) {
+    vec2 head = centerCC;
+    vec2 tail = centerCP;
+
+    float progress = clamp((iTime - iTimeCursorChange) / SMEAR_DURATION, 0.0, 1.0);
+    if (progress >= 1.0) {
+        return baseColor;
+    }
+    float fade = easeSmear(progress);
+
+    float t;
+    float dist = sdSegment(vu, tail, head, t);
+
+    float halfWidth = currentCursor.w * 0.5 * SMEAR_WIDTH_SCALE * mix(1.0 - SMEAR_TAPER, 1.0, t);
+    float mask = 1.0 - smoothstep(0.0, halfWidth + 0.002, dist);
+
+    vec4 flashColor = mix(ACCENT_COLOR, ACCENT_COLOR_BRIGHT, t);
+    float alpha = mask * fade;
+
+    return mix(baseColor, flashColor, alpha);
+}
+
+// ---- smooth move: cursor rectangle glides to its new position/size ----
+
+const float MOVE_DURATION = 0.1; // seconds
+
+float easeMove(float x) {
+    float t = 1.0 - x;
+    return 1.0 - t * t * t;
+}
+
+vec4 applySmoothMove(vec4 baseColor, vec2 fragCoord) {
+    float progress = clamp((iTime - iTimeCursorChange) / MOVE_DURATION, 0.0, 1.0);
+    if (progress >= 1.0) {
+        return baseColor;
+    }
+    float eased = easeMove(progress);
+
+    float invResY = 1.0 / iResolution.y;
+    float scale = 2.0 * invResY;
+    vec2 normOffset = iResolution.xy * invResY;
+
+    vec2 currentPos = iCurrentCursor.xy * scale - normOffset;
+    vec2 previousPos = iPreviousCursor.xy * scale - normOffset;
+    vec2 currentSize = iCurrentCursor.zw * scale;
+    vec2 previousSize = iPreviousCursor.zw * scale;
+
+    vec2 pos = mix(previousPos, currentPos, eased);
+    vec2 size = mix(previousSize, currentSize, eased);
+    vec2 halfSize = size * 0.5;
+    vec2 center = pos + vec2(halfSize.x, -halfSize.y);
+
+    vec2 normCoord = fragCoord * scale - normOffset;
+    float sdf = sdRectangle(normCoord, center, halfSize);
+
+    float aaWidth = scale;
+    float alpha = 1.0 - smoothstep(-aaWidth, aaWidth, sdf);
+
+    vec4 result = baseColor;
+    result.rgb = mix(result.rgb, iCurrentCursorColor.rgb, alpha * iCurrentCursorColor.a);
+    return result;
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+    vec4 color = texture(iChannel0, fragCoord / iResolution.xy);
+
+    vec2 vu = norm(fragCoord, 1.);
+    vec4 currentCursor = vec4(norm(iCurrentCursor.xy, 1.), norm(iCurrentCursor.zw, 0.));
+    vec4 previousCursor = vec4(norm(iPreviousCursor.xy, 1.), norm(iPreviousCursor.zw, 0.));
+    vec2 centerCC = getRectangleCenter(currentCursor);
+    vec2 centerCP = getRectangleCenter(previousCursor);
+
+    // Every effect below fades to baseColor outside a radius bounded by
+    // distance(centerCC, centerCP) plus cursor size, so pixels outside this
+    // box are guaranteed no-ops. Skip them instead of paying for the SDF
+    // math on the whole screen every frame.
+    float spread = distance(centerCC, centerCP) + max(max(currentCursor.z, currentCursor.w), max(previousCursor.z, previousCursor.w));
+    vec2 bboxMin = min(centerCC, centerCP) - spread;
+    vec2 bboxMax = max(centerCC, centerCP) + spread;
+    bool inCursorRegion = all(greaterThanEqual(vu, bboxMin)) && all(lessThanEqual(vu, bboxMax));
+
+    if (inCursorRegion) {
+        // smoothMove must run first: it paints the solid cursor block at its
+        // glided position, so blaze/smear flashes stay on top instead of
+        // getting overwritten by it.
+        if (ENABLE_SMOOTH) {
+            color = applySmoothMove(color, fragCoord);
+        }
+        if (ENABLE_BLAZE) {
+            color = applyBlaze(color, vu, currentCursor, centerCC, centerCP);
+        }
+        if (ENABLE_SMEAR) {
+            color = applySmear(color, vu, currentCursor, centerCC, centerCP);
+        }
+    }
+    fragColor = color;
+}

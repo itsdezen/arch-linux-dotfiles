@@ -1,0 +1,22 @@
+# TokyoNight Night — color tokens
+# Sourced in place (not stowed) as $DOTFILES_DIR/theme/colors.
+# Hand-authored configs (Waybar, Fuzzel, Mako, hyprlock, Hyprland) copy these
+# hex values directly since none of those tools can `source` a shell file for
+# styling — keep this file as the single point of truth when the values
+# themselves ever change, and grep for the old hex to find every copy.
+
+COLOR_BG="#1a1b26"
+COLOR_BG_ALT="#16161e"
+COLOR_SURFACE="#1f2335"
+COLOR_FG="#c0caf5"
+COLOR_MUTED="#565f89"
+COLOR_BORDER="#3b4261"
+COLOR_SELECTION="#33467c"
+
+COLOR_ACCENT="#7AA2F7"
+COLOR_SUCCESS="#9ECE6A"
+COLOR_WARNING="#E0AF68"
+COLOR_ERROR="#F7768E"
+COLOR_AQUA="#7DCFFF"
+COLOR_VIOLET="#BB9AF7"
+COLOR_ORANGE="#FF9E64"
