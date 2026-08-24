@@ -1,10 +1,17 @@
 local mainMod = "SUPER"
+-- ALT, not SUPER: keyd remaps SUPER+K -> Ctrl+Shift+K at the evdev level
+-- (system/etc/keyd/default.conf) for Ghostty clear-screen, below Hyprland's
+-- SUPER grab, so Hyprland would never see a plain SUPER+K here.
+local navMod = "ALT"
 
 -- Apps
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd("ghostty"))
 hl.bind(mainMod .. " + SPACE",  hl.dsp.exec_cmd("fuzzel"))
 hl.bind(mainMod .. " + E",      hl.dsp.exec_cmd("spf"))
-hl.bind(mainMod .. " + V",      hl.dsp.exec_cmd("clipboard-picker"))
+-- SHIFT+V, not V: keyd remaps SUPER+V -> Ctrl+Shift+V at the evdev level
+-- (system/etc/keyd/default.conf) for Ghostty paste, below Hyprland's SUPER
+-- grab, so Hyprland would never see a plain SUPER+V here.
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("clipboard-picker"))
 
 -- Window management
 hl.bind(mainMod .. " + W",             hl.dsp.window.close())
@@ -13,16 +20,16 @@ hl.bind(mainMod .. " + F",             hl.dsp.window.fullscreen({ mode = "fullsc
 hl.bind(mainMod .. " + SHIFT + SPACE", hl.dsp.window.float({ action = "toggle" }))
 
 -- Focus (vim-style)
-hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
-hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "right" }))
-hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "up" }))
-hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "down" }))
+hl.bind(navMod .. " + H", hl.dsp.focus({ direction = "left" }))
+hl.bind(navMod .. " + L", hl.dsp.focus({ direction = "right" }))
+hl.bind(navMod .. " + K", hl.dsp.focus({ direction = "up" }))
+hl.bind(navMod .. " + J", hl.dsp.focus({ direction = "down" }))
 
 -- Move window (vim-style)
-hl.bind(mainMod .. " + SHIFT + H", hl.dsp.window.move({ direction = "left" }))
-hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.move({ direction = "right" }))
-hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.move({ direction = "up" }))
-hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.move({ direction = "down" }))
+hl.bind(navMod .. " + SHIFT + H", hl.dsp.window.move({ direction = "left" }))
+hl.bind(navMod .. " + SHIFT + L", hl.dsp.window.move({ direction = "right" }))
+hl.bind(navMod .. " + SHIFT + K", hl.dsp.window.move({ direction = "up" }))
+hl.bind(navMod .. " + SHIFT + J", hl.dsp.window.move({ direction = "down" }))
 
 -- Workspaces: SUPER+[1-9] switch, SUPER+SHIFT+[1-9] move window
 for i = 1, 9 do
