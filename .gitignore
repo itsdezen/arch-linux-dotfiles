@@ -2,3 +2,7 @@
 # Lives inside hyprland/.config/hypr/ because that whole tree is stowed as
 # one symlink target — see the comment in hyprpaper/.config/hyprpaper/hyprpaper.conf.
 hyprland/.config/hypr/wallpaper.conf
+
+# fcitx5 regenerates this on every run — a full dump of every layout it knows
+# about (BQN, APL, etc.), not user config. Not meant to be stowed.
+fcitx5/.config/fcitx5/conf/cached_layouts
