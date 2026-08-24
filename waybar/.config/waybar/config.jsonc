@@ -7,7 +7,7 @@
   "margin-left": 24,
   "margin-right": 24,
 
-  "modules-left": ["custom/launcher", "hyprland/window", "custom/files", "custom/browser", "custom/terminal", "custom/clipboard"],
+  "modules-left": ["custom/launcher", "hyprland/window"],
   "modules-center": [],
   "modules-right": ["hyprland/workspaces", "custom/fcitx5", "network", "pulseaudio", "battery", "custom/control-center", "clock#date", "clock#time"],
 
@@ -25,30 +25,6 @@
     },
     "max-length": 50,
     "separate-outputs": true,
-    "tooltip": false
-  },
-
-  "custom/files": {
-    "format": "Files",
-    "on-click": "spf",
-    "tooltip": false
-  },
-
-  "custom/browser": {
-    "format": "Browser",
-    "on-click": "chromium",
-    "tooltip": false
-  },
-
-  "custom/terminal": {
-    "format": "Terminal",
-    "on-click": "ghostty",
-    "tooltip": false
-  },
-
-  "custom/clipboard": {
-    "format": "Clipboard",
-    "on-click": "clipboard-picker",
     "tooltip": false
   },
 

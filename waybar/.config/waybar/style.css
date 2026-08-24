@@ -22,10 +22,6 @@ window#waybar {
 
 #custom-launcher,
 #window,
-#custom-files,
-#custom-browser,
-#custom-terminal,
-#custom-clipboard,
 #workspaces,
 #custom-fcitx5,
 #network,
@@ -46,14 +42,6 @@ window#waybar {
 
 #window {
   font-weight: 700;
-  padding: 0 8px;
-}
-
-#custom-files,
-#custom-browser,
-#custom-terminal,
-#custom-clipboard {
-  font-weight: 400;
   padding: 0 8px;
 }
 

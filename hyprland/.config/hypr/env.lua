@@ -1,4 +1,14 @@
 -- Session environment for a clean Wayland stack under Hyprland.
+
+-- greetd/tuigreet → start-hyprland spawns Hyprland without sourcing the
+-- user's shell profile (zsh/.zprofile), so Hyprland's own PATH is the bare
+-- system default. Everything Hyprland execs — waybar (autostart.lua) and
+-- its custom modules, keybind dispatchers (binds.lua) — inherits that PATH,
+-- so bare script names under ~/.local/bin (fcitx5-status, control-center,
+-- volume-popup, screenshot, clipboard-picker, wallpaper-set) silently fail
+-- to resolve. Prepend it here so every Hyprland-spawned process finds them.
+hl.env("PATH", "$HOME/.local/bin:$PATH")
+
 hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
 hl.env("XDG_SESSION_TYPE", "wayland")
 hl.env("XDG_SESSION_DESKTOP", "Hyprland")
