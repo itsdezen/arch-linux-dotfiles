@@ -63,7 +63,7 @@ Three senses of "package" in this repo:
 - **`system/etc/` files are never stowed — only `install.sh` writes into `/etc`** (via `deploy_system_files`, an explicit `sudo install -D`).
 - New scripts under `scripts/.local/bin/` must be `chmod +x` before committing — Stow preserves permissions as-is, so a non-executable symlinked script silently fails.
 - Adding a package: add it to the relevant Stow package directory + `STOW_PACKAGES` in `install.sh`, or to the matching `packages/*.txt` file (`official.txt`, `aur.txt`, `devtools.txt`).
-- Theme colors are hand-authored per tool from the hex values in `theme/colors` (most config languages here can't `source` a shell file). If the palette ever changes, update every hand-authored config — Waybar, Fuzzel, Mako, hyprlock, Hyprland `decoration.conf` — in the same change. Ghostty, Neovim, Superfile, and herdr instead use a built-in/named TokyoNight preset — never hand-author colors when a preset already exists.
+- Theme colors are hand-authored per tool from the hex values in `theme/colors` (most config languages here can't `source` a shell file). If the palette ever changes, update every hand-authored config — Waybar, Fuzzel, Mako, hyprlock, Hyprland `decoration.lua` — in the same change. Ghostty, Neovim, Superfile, and herdr instead use a built-in/named TokyoNight preset — never hand-author colors when a preset already exists.
 
 ---
 
@@ -76,11 +76,13 @@ Spot-check these on the real box; none of them block a first run:
 - **No hypridle "dim" stage**: needs `brightnessctl`, a laptop-only tool not in scope here.
 - **herdr install source unverified**: `install_devtools_vendor()` curls `https://herdr.dev/install.sh` as herdr's official installer — this was not 100% confirmed against upstream. Spot-check before trusting it blindly.
 - **No Bluetooth/NetworkManager GUI tray applet**: CLI-only (`nmcli`, `bluetoothctl`) until one is added.
-- **Font family names**: `env.conf`/Waybar/Fuzzel assume `inter-font` resolves to `Inter` and `ttf-fantasque-nerd` resolves to `FantasqueSansM Nerd Font Mono` in `fc-list` — only confirmable on real hardware.
-- **Bibata cursor directory name**: `env.conf` assumes `Bibata-Modern-Ice` under `/usr/share/icons` — the AUR `bibata-cursor-theme-bin` package's actual installed directory name is only confirmable on real hardware.
+- **Font family names**: `env.lua`/Waybar/Fuzzel assume `inter-font` resolves to `Inter` and `ttf-fantasque-nerd` resolves to `FantasqueSansM Nerd Font Mono` in `fc-list` — only confirmable on real hardware.
+- **Bibata cursor directory name**: `env.lua` assumes `Bibata-Modern-Ice` under `/usr/share/icons` — the AUR `bibata-cursor-theme-bin` package's actual installed directory name is only confirmable on real hardware.
 - **Ghostty install path**: `install_ghostty()` tries the official `pacman` package first, falls back to AUR via `paru` — which path actually fires depends on mirror sync state on the real install date.
-- **`spf` binary name**: `binds.conf` (`SUPER+E`) and `install.sh`'s validate step assume superfile's installed binary is named `spf`, not `superfile` — confirm on first run.
+- **`spf` binary name**: `binds.lua` (`SUPER+E`) and `install.sh`'s validate step assume superfile's installed binary is named `spf`, not `superfile` — confirm on first run.
 - **Codex/Claude Code configs start fresh**: the ported `codex/.codex/config.toml` and `claude/.claude/settings.json` intentionally drop the source macOS repo's machine-specific state (per-project trust levels, hook hashes, an absolute-path `SessionStart` hook script that doesn't exist here) — both tools will re-prompt/re-onboard on first use, which is expected.
+- **Hyprland config ported to Lua, syntax not runtime-verified**: since Hyprland 0.55, hyprlang (`.conf`) is deprecated in favor of Lua (`hyprland.lua`); this repo migrated `hyprland/.config/hypr/*.conf` to `*.lua` fully, following the official `hyprwm/Hyprland` example config and Lua API docs. No local Lua interpreter was available to verify syntax at authoring time (only a hand-rolled bracket/quote balance check ran) — the whole thing is unverified against a real Hyprland instance. Specific points needing a spot-check on first boot: whether `pin = true` is a valid static `window_rule` field (used for Picture-in-Picture in `windowrules.lua` — docs only confirm it as a keybind dispatcher, `hl.dsp.window.pin()`, not a window-rule field) and whether `"specialWorkspace"` is still a valid `hl.animation` leaf name (docs list a non-exhaustive sample that doesn't explicitly include it). If Hyprland refuses to start, check `journalctl` / run `Hyprland` from a TTY to see the actual Lua error, and compare against `https://github.com/hyprwm/Hyprland/blob/main/example/hyprland.lua`.
+- **Chromium has no theme integration**: it's in `packages/official.txt` as a plain browser install — no GTK/Wayland-flag tuning or TokyoNight theming was set up for it (out of scope for this ask).
 
 ---
 

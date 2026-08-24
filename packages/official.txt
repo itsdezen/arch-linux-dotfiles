@@ -54,6 +54,9 @@ papirus-icon-theme
 # File manager (binary is `spf`, not `superfile`)
 superfile
 
+# Browser
+chromium
+
 # Core CLI / editor / shell
 neovim
 git

@@ -148,7 +148,7 @@ install_aur_list() {
   while IFS= read -r pkg; do pkgs+=("$pkg"); done < <(read_pkg_list "$file")
   [[ ${#pkgs[@]} -gt 0 ]] || { skip "$label — nothing to install"; return; }
   spin "Installing $label (${#pkgs[@]} packages)"
-  if paru -S --needed --noconfirm "${pkgs[@]}" >/dev/null 2>&1; then
+  if paru -S --needed --noconfirm --skipreview "${pkgs[@]}" >/dev/null 2>&1; then
     spin_ok "$label installed"
   else
     spin_warn "$label — some packages failed, check manually"
@@ -167,7 +167,7 @@ install_ghostty() {
   else
     warn "ghostty not available in official repos yet — falling back to AUR"
     bootstrap_paru
-    if paru -S --needed --noconfirm ghostty >/dev/null 2>&1; then
+    if paru -S --needed --noconfirm --skipreview ghostty >/dev/null 2>&1; then
       ok "ghostty installed (AUR)"
     else
       warn "ghostty install failed — install manually later"
@@ -213,7 +213,10 @@ install_devtools_vendor() {
     skip "codex (already installed)"
   else
     spin "Installing Codex CLI"
-    if curl -fsSL https://chatgpt.com/codex/install.sh | bash >/dev/null 2>&1; then
+    # CODEX_NON_INTERACTIVE suppresses the installer's own "Start Codex now?"
+    # prompt, which otherwise hangs forever with no real stdin to read from
+    # under `curl | bash`.
+    if (export CODEX_NON_INTERACTIVE=true; curl -fsSL https://chatgpt.com/codex/install.sh | bash) >/dev/null 2>&1; then
       spin_ok "Codex CLI installed"
     else
       spin_warn "Codex CLI install failed — non-fatal, install manually later"
@@ -445,7 +448,7 @@ validate_installation() {
   # on real hardware (Known Gap).
   for bin in Hyprland waybar fuzzel mako hyprlock hypridle hyprpaper spf \
              nvim zsh starship stow tuigreet ghostty git mise gh lazygit \
-             docker jq yq direnv shellcheck fd rg btop; do
+             docker jq yq direnv shellcheck fd rg btop chromium; do
     check_bin "$bin"
   done
 
