@@ -1,9 +1,11 @@
 # Deployed by install.sh via `sudo install -D` — never symlinked/stowed.
-# tuigreet launches Hyprland directly on successful login.
+# tuigreet launches Hyprland via start-hyprland on successful login.
+# Since Hyprland 0.56, launching the raw `Hyprland` binary directly (skipping
+# the start-hyprland wrapper) triggers a startup nag notification.
 
 [terminal]
 vt = 1
 
 [default_session]
-command = "tuigreet --time --remember --cmd Hyprland"
+command = "tuigreet --time --remember --cmd start-hyprland"
 user = "greeter"
