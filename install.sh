@@ -360,6 +360,16 @@ configure_greetd() {
   else
     warn "failed to enable greetd — enable manually: sudo systemctl enable greetd"
   fi
+
+  # greetd's config.toml pins vt = 1, same VT Arch's default getty@tty1
+  # targets. Left enabled, the two race for tty1 on boot, which is what lets
+  # kernel/systemd boot log lines print through over (or under) the tuigreet
+  # screen instead of a clean handoff. Mask it so only greetd ever owns vt1.
+  if sudo systemctl mask getty@tty1.service >/dev/null 2>&1; then
+    ok "getty@tty1 masked (no more log races with greetd on vt1)"
+  else
+    warn "failed to mask getty@tty1 — mask manually: sudo systemctl mask getty@tty1.service"
+  fi
   section_end
 }
 

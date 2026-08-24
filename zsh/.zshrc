@@ -1,6 +1,6 @@
 # =============================================================================
 # ~/.zshrc — Main Zsh configuration
-# Managed by: ~/Developer/arch-linux-dotfiles
+# Managed by: ~/Developer/dotfiles
 # =============================================================================
 
 # ── Path ─────────────────────────────────────────────────────────────────────
@@ -84,8 +84,8 @@ alias g="git"
 
 # Development
 alias dev="cd ~/Developer"
-alias dots="cd ~/Developer/arch-linux-dotfiles"
-alias dots-sync="(cd ~/Developer/arch-linux-dotfiles && git pull && ./install.sh stow)"
+alias dots="cd ~/Developer/dotfiles"
+alias dots-sync="(cd ~/Developer/dotfiles && git pull && ./install.sh stow)"
 alias v="nvim"
 alias cc="claude"
 alias oc="opencode"
@@ -123,7 +123,7 @@ fi
 # startup stays fast. First install is unaffected — this file only exists
 # after the initial ./install.sh. Run `dotfiles-update` to check manually.
 dotfiles-update() {
-  local repo="$HOME/Developer/arch-linux-dotfiles"
+  local repo="$HOME/Developer/dotfiles"
   [[ -d "$repo/.git" ]] || return 0
 
   if [[ "$1" != "--force" ]]; then
